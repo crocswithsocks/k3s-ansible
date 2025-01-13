@@ -1,0 +1,6 @@
+{% for host in ssh_hosts %}
+Host {{ host.inventory_hostname  }}
+  HostName {{ host.ansible_host | default(host.inventory_hostname) }}
+  User {{ host.ansible_user | default('will') }}
+  IdentityFile {{ host.ssh_config_id_file | default('~/.ssh/id_proxmox')}}
+{% endfor %}

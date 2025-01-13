@@ -1,0 +1,22 @@
+---
+- name: Generate SSH config file
+  hosts: localhost
+  become: false
+  tasks:
+    - name: ensure .ssh directory is created
+      ansible.builtin.file:
+        path: /Users/willbrown/.ssh
+        owner: willbrown
+        group: staff
+        mode: "0700"
+        state: directory
+    - name: generate ssh config file
+      template:
+        src: templates/ssh_config.j2
+        dest: /Users/willbrown/.ssh/config
+        owner: willbrown
+        group: staff
+        mode: "0644"
+        backup: true
+      vars:
+        ssh_hosts: "{{ groups['all'] | map('extract', hostvars) | list }}"
